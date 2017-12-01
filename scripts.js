@@ -1,7 +1,8 @@
 $(document).ready(function() {
-    var sg = {
-        counter: 5
+    var simon = {
+        gameStatus: 'off',
+        strictModeStatus: 'off'
     };
 
-    console.log(sg.counter);
+    console.log(simon.gameStatus);
 });
