@@ -23,10 +23,23 @@
                     </h1>
                     <div id="control-elements">
                         <div id="info-display" class="elements">---</div>
-                        <div id="start-restart-btn" class="button elements start-off"></div>
-                        <div id="strict-btn" class="button elements start-off"></div>
+                        <div id="start-restart-btn" class="button elements start-off noselect"></div>
+                        <div id="strict-btn" class="button elements start-off noselect"></div>
                     </div>
-                    <div class="power elements">TURN ON</div>
+                    <div id="switch-area">
+                        <div class="power-element">
+                            OFF
+                        </div>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="power-element">
+                            ON
+                        </div>
+                    </div>
                 </div>
             </div>
 
