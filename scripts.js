@@ -4,7 +4,9 @@ $(document).ready(function () {
         gameStatus: 'off',
         strictModeStatus: 'off',
         series: [],
-        stepCounter: 0
+        stepCounter: 0,
+        isMusicPlayed: false,
+        isAnswerGiven: false
     };
 
     var i = 0;
@@ -12,9 +14,20 @@ $(document).ready(function () {
         i++;
         //console.log('clicked green');
         addNumberToSeries(i);
-        console.log(simon.series);
+        //console.log(simon.series);
+        if (simon.isMusicPlayed) {
+            setTimeout(function () {
+                if (!simon.isAnswerGiven) {
+                    console.log('fail!');
+                }
+            }, 3000);
+        }
+
     });
 
+    function startGame() {
+
+    }
 
     function setupNewGame() {
         emptySequence();
@@ -45,18 +58,24 @@ $(document).ready(function () {
         if ($('.switch input').is(':checked')) {
             $('#start-restart-btn').removeClass('noselect');
             $('.quarter').removeClass('noselect');
-            simon.gameStatus = 'on';
+            simon.deviceStatus = 'on';
         } else {
             $('#start-restart-btn quarter').addClass('noselect');
             $('.quarter').removeClass('noselect');
-            simon.gameStatus = 'off';
+            simon.deviceStatus = 'off';
         }
-        console.log(simon.gameStatus);
+        console.log('device status is ', simon.gameStatus);
 
     });
 
     $('#start-restart-btn').click(function () {
-        console.log('clicked');
+        if (simon.gameStatus === 'off') {
+            simon.gameStatus = 'on';
+        } else {
+            simon.gameStatus = 'off';
+        }
+        simon.isMusicPlayed = true;
+        console.log('game is ', simon.gameStatus);
     });
 
 });
