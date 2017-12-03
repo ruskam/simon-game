@@ -3,29 +3,40 @@ $(document).ready(function () {
         deviceStatus: 'off',
         gameStatus: 'off',
         strictModeStatus: 'off',
-        series: []
+        series: [],
+        stepCounter: 0
     };
 
-
     var i = 0;
-    $('.quarter1').click(function () {
+    $('.quarter').click(function () {
         i++;
         //console.log('clicked green');
-        //addNumberToSeries(i);
-        //console.log(simon.series);
+        addNumberToSeries(i);
+        console.log(simon.series);
     });
 
 
-    function addNumberToSeries(number) {
-        simon.series.push(number);
+    function setupNewGame() {
+        emptySequence();
+        setCounterToZero();
     }
 
-    function getRandom(min, max) {
-        var rMin = Math.ceil(min); //round to int greather
-        var rMax = Math.floor(max); //round to int lesse than specified number
-        var random = Math;
-        console.log(random);
-        return random;
+    function setCounterToZero() {
+        simon.stepCounter = 0;
+    }
+
+    function emptySequence() {
+        simon.series = [];
+    }
+
+    function addNumberToSeries(number) {
+        simon.series.push(getRandom());
+    }
+
+    function getRandom() {
+        const min = 1;
+        const max = 5;
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 
     /** Switch On the game */
@@ -33,9 +44,11 @@ $(document).ready(function () {
 
         if ($('.switch input').is(':checked')) {
             $('#start-restart-btn').removeClass('noselect');
+            $('.quarter').removeClass('noselect');
             simon.gameStatus = 'on';
         } else {
-            $('#start-restart-btn').addClass('noselect');
+            $('#start-restart-btn quarter').addClass('noselect');
+            $('.quarter').removeClass('noselect');
             simon.gameStatus = 'off';
         }
         console.log(simon.gameStatus);

@@ -48,11 +48,19 @@
     border-radius: 0 100% 0 0;
 }
 
+.quarter2:hover {
+    background-color: rgb(153, 41, 41);
+}
+
 .quarter3 {
     bottom: 0;
     left: 0;
-    background-color: darkorange;
+    background-color: rgb(105, 67, 23);
     border-radius: 0 0 0 100%;
+}
+
+.quarter3:hover {
+    background-color: rgb(168, 115, 54);
 }
 
 .quarter4 {
@@ -60,6 +68,10 @@
     right: 0;
     background-color: darkblue;
     border-radius: 0 0 100% 0;
+}
+
+.quarter4:hover {
+    background-color: blue;
 }
 
 .cutout {
