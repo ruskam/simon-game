@@ -35,28 +35,21 @@ $(document).ready(function() {
             } else {
                 console.log('answer NOT given');
             }
+        }, 2000);
 
+        simon.sessionInterval = setInterval(function() {
+            if (simon.isAnswerGiven) {
+                console.log(simon.isAnswerGiven);
+                startGame();
+            }
         }, 5000);
-    /*
-            simon.sessionInterval = setInterval(function() {
-                if (simon.isAnswerGiven) {
-                    console.log(simon.isAnswerGiven);
-                    startGame();
-                }
-            }, 5000);
-    */
+
     });
 
     $('#strict-btn').click(function() {
         simon.isAnswerGiven = false;
         console.log('should be stopped now');
     });
-
-    var k = 0;
-    function repeatSequence() {
-        var myDate = new Date();
-        console.log('sequence repeated', myDate.getHours(), ':', myDate.getMinutes(), ':', myDate.getSeconds());
-    }
 
     function startGame() {
         console.log('game started');
