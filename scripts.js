@@ -5,8 +5,10 @@ $(document).ready(function() {
         series: [],
         stepCounter: 0,
         isMusicPlayed: true,
-        isAnswerGiven: false,
-        sessionInterval: null
+        isAnswerGiven: true,
+        sessionInterval: null,
+        answerTimeout: null,
+        isAnswerExpected: false
     };
 
     var i = 0;
@@ -27,22 +29,41 @@ $(document).ready(function() {
 
     $('#start-restart-btn').click(function() {
 
-        simon.sessionInterval = setInterval(function() {
-            simon.stepCounter++;
-            var randomNumber = getRandom();
-            addNumberToSeries(randomNumber);
-            console.log(simon.series);
+        simon.answerTimeout = setTimeout(function() {
+            if (simon.isAnswerGiven) {
+                console.log('answer given');
+            } else {
+                console.log('answer NOT given');
+            }
 
-            var tempInterval;
-            tempInterval = setInterval(function() {}, 5000);
-
-        }, 2000);
-
-
+        }, 5000);
+    /*
+            simon.sessionInterval = setInterval(function() {
+                if (simon.isAnswerGiven) {
+                    console.log(simon.isAnswerGiven);
+                    startGame();
+                }
+            }, 5000);
+    */
     });
 
+    $('#strict-btn').click(function() {
+        simon.isAnswerGiven = false;
+        console.log('should be stopped now');
+    });
+
+    var k = 0;
+    function repeatSequence() {
+        var myDate = new Date();
+        console.log('sequence repeated', myDate.getHours(), ':', myDate.getMinutes(), ':', myDate.getSeconds());
+    }
+
     function startGame() {
-        console.log('session started');
+        console.log('game started');
+        simon.stepCounter++;
+        var randomNumber = getRandom();
+        addNumberToSeries(randomNumber);
+        console.log(simon.series);
     }
 
     function setupNewGame() {
@@ -77,10 +98,12 @@ $(document).ready(function() {
 
         if ($('.switch input').is(':checked')) {
             $('#start-restart-btn').removeClass('noselect');
+            $('#strict-btn').removeClass('noselect');
             $('.quarter').removeClass('noselect');
             simon.deviceStatus = 'on';
         } else {
             $('#start-restart-btn').addClass('noselect');
+            $('#strict-btn').addClass('noselect');
             $('.quarter').addClass('noselect');
             simon.deviceStatus = 'off';
         }

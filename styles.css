@@ -103,17 +103,23 @@
     cursor: pointer;
     font-size: 20px;
     text-decoration: none;
-    color: black;
+    color: rgb(151, 120, 120);
     padding: 10px;
-    color: #926239;
-    border: #926239 1px solid;
+    border: #473f37 1px solid;
     border-radius: 50%;
     text-align: center;
-    box-shadow: 0 1px #4d4d4d;
+    box-shadow: 0 3px #a17f7f;
 }
 
 .button:hover {
     background-color: #4d4d4d;
+}
+
+.button:active {
+    background-color: #4d4d4d;
+    border: #473f37 1px solid;
+    box-shadow: 0 3px #a17f7f;
+    transform: translateY(2px);
 }
 
 .start-on {
