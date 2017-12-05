@@ -1,63 +1,82 @@
 $(document).ready(function() {
-    var simon = {
+    var sg = {
         deviceStatus: 'off',
         strictModeStatus: 'off',
         series: [],
+        answers: [],
         stepCounter: 0,
         isMusicPlayed: true,
-        isAnswerGiven: true,
+        isAnswerCorrect: true,
         sessionInterval: null,
         answerTimeout: null,
-        isAnswerExpected: false
+        isAnswerExpected: false,
+        guessed: 0,
+        randomNumber: 0
     };
 
-    var i = 0;
-    $('.quarter').click(function() {
-        i++;
-        console.log('clicked green');
-        addNumberToSeries(i);
-        //console.log(simon.series);
-        if (simon.isMusicPlayed) {
-            setTimeout(function() {
-                if (!simon.isAnswerGiven) {
-                    console.log('fail!');
-                }
-            }, 3000);
-        }
-
-    });
-
     $('#start-restart-btn').click(function() {
-
-        simon.answerTimeout = setTimeout(function() {
-            if (simon.isAnswerGiven) {
-                console.log('answer given');
-            } else {
-                console.log('answer NOT given');
-            }
-        }, 2000);
-
-        simon.sessionInterval = setInterval(function() {
-            if (simon.isAnswerGiven) {
-                console.log(simon.isAnswerGiven);
-                startGame();
-            }
-        }, 5000);
-
-    });
-
-    $('#strict-btn').click(function() {
-        simon.isAnswerGiven = false;
-        console.log('should be stopped now');
+        sg.answers = [];
+        sg.series = [];
+        sg.sessionInterval = setInterval(startGame, 1000);
     });
 
     function startGame() {
-        console.log('game started');
-        simon.stepCounter++;
-        var randomNumber = getRandom();
-        addNumberToSeries(randomNumber);
-        console.log(simon.series);
+
+        if (sg.isAnswerCorrect) {
+            sg.stepCounter++;
+            sg.randomNumber = getRandom();
+            sg.series.push(sg.randomNumber);
+            console.log(sg.series);
+        }
+        console.log('Now click to guess the number');
+        clearInterval(sg.sessionInterval);
+
+        var clickCounter = 0;
+        $('.quarter').click(function() {
+            clickCounter++;
+            if (clickCounter < sg.stepCounter) {
+
+                $('.quarter').removeClass('noselect');
+
+                console.log('Clicked');
+                sg.guessed = $(this).data('number');
+                sg.answers.push(sg.quesssed);
+                console.log(sg.guessed);
+            }
+        });
+        console.log('setInterval():', sg.sessionInterval);
+        sg.answerTimeout = setTimeout(function() {
+
+            if (hasErrors(sg.series, sg.answers)) {
+                console.log('answer correct, we increase time');
+                clearInterval(sg.sessionInterval);
+                sg.isAnswerCorrect = true;
+                sg.stepCounter++;
+                sg.sessionInterval = setInterval(startGame, 1000);
+            } else {
+                console.log('answer NOT correct, counter proceed');
+                clearInterval(sg.sessionInterval);
+
+                sg.isAnswerCorrect = false;
+                sg.sessionInterval = setInterval(startGame, 1000);
+            }
+        }, 5000);
     }
+
+    function hasErrors(questions, responses) {
+        var containsError = false;
+        for (var i = 0; i < questions.length; i++) {
+            if (questions[i] !== responses[i]) {
+                return containsError;
+            }
+        }
+        return true;
+    }
+
+    $('#strict-btn').click(function() {
+        clearInterval(sg.sessionInterval);
+        console.log('should be stopped now');
+    });
 
     function setupNewGame() {
         emptySequence();
@@ -65,19 +84,19 @@ $(document).ready(function() {
     }
 
     function emptySequenceArray() {
-        simon.series = [];
+        sg.series = [];
     }
 
     function setCounterToZero() {
-        simon.stepCounter = 0;
+        sg.stepCounter = 0;
     }
 
     function emptySequence() {
-        simon.series = [];
+        sg.series = [];
     }
 
     function addNumberToSeries(number) {
-        simon.series.push(getRandom());
+        sg.series.push(getRandom());
     }
 
     function getRandom() {
@@ -92,13 +111,13 @@ $(document).ready(function() {
         if ($('.switch input').is(':checked')) {
             $('#start-restart-btn').removeClass('noselect');
             $('#strict-btn').removeClass('noselect');
-            $('.quarter').removeClass('noselect');
-            simon.deviceStatus = 'on';
+            //$('.quarter').removeClass('noselect');
+            sg.deviceStatus = 'on';
         } else {
             $('#start-restart-btn').addClass('noselect');
             $('#strict-btn').addClass('noselect');
-            $('.quarter').addClass('noselect');
-            simon.deviceStatus = 'off';
+            //$('.quarter').addClass('noselect');
+            sg.deviceStatus = 'off';
         }
 
     });

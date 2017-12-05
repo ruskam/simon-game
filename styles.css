@@ -108,17 +108,17 @@
     border: #473f37 1px solid;
     border-radius: 50%;
     text-align: center;
-    box-shadow: 0 3px #a17f7f;
+    box-shadow: 0 3px #664c4c;
 }
 
 .button:hover {
-    background-color: #4d4d4d;
+    background-color: #bb9999;
 }
 
 .button:active {
     background-color: #4d4d4d;
-    border: #473f37 1px solid;
-    box-shadow: 0 3px #a17f7f;
+    /*border: #473f37 1px solid;*/
+    box-shadow: 0 1px #a17f7f;
     transform: translateY(2px);
 }
 
