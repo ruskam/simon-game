@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var sg = {
+    var simon = {
         deviceStatus: 'off',
         strictModeStatus: 'off',
         series: [],
@@ -15,68 +15,58 @@ $(document).ready(function() {
     };
 
     $('#start-restart-btn').click(function() {
-        sg.series = [];
-        sg.answers = [];
-        sg.stepCounter = 0;
-        sg.isAnswerCorrect = true;
-        sg.sessionInterval = setInterval(startGame, 1000);
+        simon.series = [];
+        simon.answers = [];
+        simon.stepCounter = 0;
+        simon.isAnswerCorrect = true;
+        simon.sessionInterval = setInterval(startGame, 500);
     });
 
     function startGame() {
-        console.log("ITERATION: " + sg.stepCounter);
+        console.log("ITERATION: " + simon.stepCounter);
+        console.log('random number is', simon.randomNumber);
 
-        clearInterval(sg.sessionInterval);
-        clearTimeout(sg.answerTimeout);
+        clearInterval(simon.sessionInterval);
+        clearTimeout(simon.answerTimeout);
+        clearAllIntervals();
+        $('.quarter').removeClass('noselect');
 
-        sg.answers = [];
-        if (sg.isAnswerCorrect) {
-            $('.quarter').removeClass('noselect');
-            sg.randomNumber = getRandom();
-            sg.series.push(sg.randomNumber);
-            console.log('series' + sg.stepCounter, sg.series);
+        if (simon.isAnswerCorrect) {
+            simon.randomNumber = getRandom();
+            simon.series.push(simon.randomNumber);
+            console.log('series#' + simon.stepCounter, simon.series);
+            console.log('Now click to guess the number');
+        } else {
+            console.log('You seem to fail to repeat last sequence');
+            console.log('series#' + simon.stepCounter, simon.series);
         }
-        console.log('Now click to guess the number');
 
         var clickCounter = 0;
-
         $('.quarter').off().click(function() {
-            console.log('clicked');
-            sg.guessed = $(this).data('number');
-            //sg.answers.splice(clickCounter, 0, sg.guessed);
-            sg.answers.push(sg.guessed);
-            console.log(sg.answers);
-
-        //clickCounter++;
+            simon.guessed = parseInt($(this).data('number'));
+            if (simon.guessed === simon.series[clickCounter]) {
+                console.log('this time correct');
+                console.log('clickCounter', clickCounter);
+                console.log('simon.series.length', simon.series.length);
+                if (clickCounter === simon.series.length - 1) {
+                    console.log('all numbers are repeated correclty');
+                    $('.quarter').addClass('noselect');
+                    simon.answerTimeout = setTimeout(function() {
+                        simon.isAnswerCorrect = true;
+                        simon.stepCounter++;
+                        simon.sessionInterval = setInterval(startGame, 1000);
+                    }, 5000 + (simon.stepCounter * 1000));
+                }
+            } else {
+                console.log('Wrong, you will given another chance');
+                simon.answerTimeout = setTimeout(function() {
+                    simon.isAnswerCorrect = false;
+                    simon.sessionInterval = setInterval(startGame, 1000);
+                }, 1000);
+            }
+            clickCounter++;
         });
 
-        sg.answerTimeout = setTimeout(function() {
-
-            if (noErrors(sg.series, sg.answers)) {
-                console.log('answer correct', sg.answers);
-                clearInterval(sg.sessionInterval);
-                sg.isAnswerCorrect = true;
-                sg.stepCounter++;
-                sg.sessionInterval = setInterval(startGame, 1000);
-            } else {
-                console.log('answer NOT correct');
-                clearInterval(sg.sessionInterval);
-                sg.isAnswerCorrect = false;
-                sg.sessionInterval = setInterval(startGame, 1000);
-            }
-
-            clearTimeout(sg.answerTimeout);
-        }, 5000 + (sg.stepCounter * 1000));
-
-        console.log("--------------------");
-    }
-
-    function noErrors(questions, responses) {
-        for (var i = 0; i < questions.length; i++) {
-            if (questions[i] !== responses[i]) {
-                return false;
-            }
-        }
-        return true;
     }
 
     function clearAllIntervals() {
@@ -86,8 +76,8 @@ $(document).ready(function() {
     }
 
     $('#strict-btn').click(function() {
-        clearInterval(sg.sessionInterval);
-        clearTimeout(sg.answerTimeout);
+        clearInterval(simon.sessionInterval);
+        clearTimeout(simon.answerTimeout);
         console.log('should be stopped now');
     });
 
@@ -97,19 +87,19 @@ $(document).ready(function() {
     }
 
     function emptySequenceArray() {
-        sg.series = [];
+        simon.series = [];
     }
 
     function setCounterToZero() {
-        sg.stepCounter = 0;
+        simon.stepCounter = 0;
     }
 
     function emptySequence() {
-        sg.series = [];
+        simon.series = [];
     }
 
     function addNumberToSeries(number) {
-        sg.series.push(getRandom());
+        simon.series.push(getRandom());
     }
 
     function getRandom() {
@@ -125,14 +115,15 @@ $(document).ready(function() {
             $('#start-restart-btn').removeClass('noselect');
             $('#strict-btn').removeClass('noselect');
             //$('.quarter').removeClass('noselect');
-            sg.deviceStatus = 'on';
+            simon.deviceStatus = 'on';
         } else {
             $('#start-restart-btn').addClass('noselect');
             $('#strict-btn').addClass('noselect');
             //$('.quarter').addClass('noselect');
-            sg.deviceStatus = 'off';
-            clearInterval(sg.sessionInterval);
-            clearTimeout(sg.answerTimeout);
+            simon.deviceStatus = 'off';
+            clearInterval(simon.sessionInterval);
+            clearTimeout(simon.answerTimeout);
+            clearAllIntervals();
         }
 
     });
