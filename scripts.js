@@ -51,11 +51,12 @@ $(document).ready(function() {
 
         var clickCounter = 0;
         $('.quarter').off().click(function() {
-            playSound('sound' + $(this).data('number'));
-            highlightArea($(this).data('number'));
+
             clickCounter++;
             simon.guessed = parseInt($(this).data('number'));
             if (simon.guessed === simon.series[clickCounter - 1]) {
+                playSound('sound' + $(this).data('number'));
+                highlightArea($(this).data('number'));
                 //console.log('this time correct');
                 //console.log('clickCounter', clickCounter);
                 //console.log('simon.series.length', simon.series.length);
